@@ -164,7 +164,6 @@ header h1{
     transform:scale(1.03);
 }
 
-/* Prayer Wall Section Styles */
 .prayer-section {
     padding: 20px 40px 60px;
 }
@@ -389,12 +388,7 @@ footer{
             <button type="submit">Submit Prayer Request</button>
         </form>
         <div class="prayer-list" id="prayerList">
-            <div class="prayer-item">
-                <h4>Maria S.</h4>
-                <p>Please pray for peace in our families and strength for those going through difficult times.</p>
-                <span>July 31, 2026</span>
             </div>
-        </div>
     </div>
 </section>
 
@@ -459,42 +453,6 @@ function closeNewsModal(){
     document.getElementById('newsModal').style.display='none';
 }
 
-// Prayer Wall functionality
-const prayerForm = document.getElementById('prayerForm');
-const prayerList = document.getElementById('prayerList');
-
-prayerForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const nameInput = document.getElementById('prayerName');
-    const textInput = document.getElementById('prayerText');
-    
-    const name = nameInput.value.trim();
-    const text = textInput.value.trim();
-    
-    if(name && text) {
-        const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        
-        const prayerItem = document.createElement('div');
-        prayerItem.className = 'prayer-item';
-        prayerItem.innerHTML = `
-            <h4>${escapeHTML(name)}</h4>
-            <p>${escapeHTML(text)}</p>
-            <span>${currentDate}</span>
-        `;
-        
-        prayerList.insertBefore(prayerItem, prayerList.firstChild);
-        
-        nameInput.value = '';
-        textInput.value = '';
-    }
-});
-
-function escapeHTML(str) {
-    return str.replace(/[&<>'"]/g, 
-        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-    );
-}
-
 const search = document.getElementById('search');
 const cards = document.querySelectorAll('.game-card');
 
@@ -512,6 +470,102 @@ search.addEventListener('input', () => {
     });
 });
 </script>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyCrmEhh4ZUWhl4MKB96bFjVu6bEFBuyAEI",
+    authDomain: "catholicweb4prayer.firebaseapp.com",
+    projectId: "catholicweb4prayer",
+    storageBucket: "catholicweb4prayer.firebasestorage.app",
+    messagingSenderId: "268932401997",
+    appId: "1:268932401997:web:0ec7c425894bee722e0504",
+    measurementId: "G-DFGBC81RD2"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+// Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const prayerForm = document.getElementById('prayerForm');
+  const prayerList = document.getElementById('prayerList');
+
+  // Function to fetch and display prayers from Firebase
+  async function fetchPrayers() {
+      try {
+          const q = query(collection(db, "prayers"), orderBy("createdAt", "desc"));
+          const querySnapshot = await getDocs(q);
+          
+          prayerList.innerHTML = ''; // Clear existing list
+          
+          querySnapshot.forEach((doc) => {
+              const prayer = doc.data();
+              const dateStr = prayer.createdAt ? new Date(prayer.createdAt.toDate()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+              
+              const prayerItem = document.createElement('div');
+              prayerItem.className = 'prayer-item';
+              prayerItem.innerHTML = `
+                  <h4>${escapeHTML(prayer.name)}</h4>
+                  <p>${escapeHTML(prayer.text)}</p>
+                  <span>${dateStr}</span>
+              `;
+              prayerList.appendChild(prayerItem);
+          });
+      } catch (error) {
+          console.error("Error loading prayers: ", error);
+      }
+  }
+
+  // Handle new prayer submissions
+  prayerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById('prayerName');
+      const textInput = document.getElementById('prayerText');
+      
+      const name = nameInput.value.trim();
+      const text = textInput.value.trim();
+      
+      if(name && text) {
+          try {
+              // Add document to Firestore database
+              await addDoc(collection(db, "prayers"), {
+                  name: name,
+                  text: text,
+                  createdAt: new Date()
+              });
+
+              nameInput.value = '';
+              textInput.value = '';
+              
+              // Refresh the list immediately
+              fetchPrayers();
+          } catch (error) {
+              alert("Error submitting prayer. Please try again.");
+              console.error("Error adding document: ", error);
+          }
+      }
+  });
+
+  function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+  }
+
+  // Load prayers automatically when the page opens
+  window.addEventListener('DOMContentLoaded', fetchPrayers);
+</script>
+
 
 </body>
 </html>
