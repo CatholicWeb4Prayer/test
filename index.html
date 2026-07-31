@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+<title>CatholicWeb4Prayer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#070b17;
+    color:#4a1508;
+    font-family:'Orbitron',sans-serif;
+    overflow-x:hidden;
+}
+
+header{
+    width:100%;
+    padding:20px;
+    background:#466b00;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 0 20px rgba(0,229,255,.5);
+}
+
+header h1{
+    font-size:2rem;
+    color: white;
+}
+
+.search-box{
+    width:300px;
+    max-width:50%;
+}
+
+.search-box input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    outline:none;
+    background:#111827;
+    color:white;
+    font-size:1rem;
+}
+
+.hero{
+    height:400px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:
+    linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.6)),
+    url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-content h2{
+    font-size:4rem;
+    margin-bottom:20px;
+    text-shadow:0 0 20px cyan;
+    color: white;
+}
+
+.hero-content p{
+    font-size:1.2rem;
+    margin-bottom:30px;
+    color: #e2e8f0;
+}
+
+.hero-content button{
+    padding:15px 30px;
+    font-size:1rem;
+    border:none;
+    border-radius:15px;
+    background:white;
+    color:black;
+    cursor:pointer;
+    font-weight:bold;
+    transition:.3s;
+    margin: 5px;
+}
+
+.hero-content button:hover{
+    transform:scale(1.1);
+}
+
+.outline-btn {
+    background: transparent !important;
+    color: white !important;
+    border: 2px solid #00e5ff !important;
+}
+
+.section-title{
+    font-size:2rem;
+    padding:30px 40px 10px;
+    color: white;
+}
+
+.games-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+    padding:30px 40px 60px;
+}
+
+.game-card{
+    background:#111827;
+    border-radius:25px;
+    overflow:hidden;
+    transition:.3s;
+    cursor:pointer;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
+    position:relative;
+    border: 1px solid #1f2937;
+}
+
+.game-card:hover{
+    transform:translateY(-10px) scale(1.03);
+    box-shadow:0 0 30px rgba(0,229,255,.4);
+}
+
+.game-info{
+    padding:20px;
+}
+
+.game-info h3{
+    margin-bottom:10px;
+    font-size:1.3rem;
+    color: white;
+}
+
+.game-info p{
+    color:#a5b4fc;
+    font-size:.9rem;
+}
+
+.play-btn{
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#00e5ff;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.play-btn:hover{
+    transform:scale(1.03);
+}
+
+/* Prayer Wall Section Styles */
+.prayer-section {
+    padding: 20px 40px 60px;
+}
+
+.prayer-container {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0,0,0,.5);
+}
+
+.prayer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.prayer-form input, .prayer-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    background: #1f2937;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.prayer-form textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.prayer-form button {
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #00e5ff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .3s;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.prayer-form button:hover {
+    transform: scale(1.02);
+}
+
+.prayer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.prayer-item {
+    background: #1f2937;
+    padding: 15px 20px;
+    border-radius: 15px;
+    border-left: 4px solid #00e5ff;
+}
+
+.prayer-item h4 {
+    color: #00e5ff;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.prayer-item p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.prayer-item span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    background:#0b1220;
+    color:#94a3b8;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.8);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.modal-content{
+    width:90%;
+    height:90%;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+}
+
+.news-content {
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 80vh;
+    padding: 40px 30px;
+    background: #111827;
+    color: white;
+    text-align: left;
+    border: 1px solid #1f2937;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+    overflow-y: auto;
+    position: relative;
+    border-radius: 20px;
+}
+
+.news-content h2 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    color: white;
+    text-align: center;
+}
+
+.news-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 15px;
+}
+
+.news-item h4 {
+    color: #00e5ff;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.news-item span {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.news-item p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+.modal iframe{
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+.close-btn{
+    position:absolute;
+    top:15px;
+    right:15px;
+    background:red;
+    color:white;
+    border:none;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:1.2rem;
+    z-index:5;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>CatholicWeb4Prayer</h1>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="keyword...">
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <p>Welcome To...</p>
+        <h2>CatholicWeb4Prayer</h2>
+        <button onclick="scrollToGames()">START BROWSING</button>
+        <button onclick="openNewsModal()" class="outline-btn">WHAT'S NEW</button>
+    </div>
+</section>
+
+<h2 class="section-title">Resources & Prayers</h2>
+<section class="games-grid" id="gamesGrid">
+    <div class="game-card" data-name="Saint Martin de Porres">
+        <div class="game-info">
+            <h3>Life of Saint Martin de porres</h3>
+            <p>Read about Saint Martin here</p>
+            <button class="play-btn" onclick="openGame('https://CatholicWeb4Prayer.github.io/Info-Saint-Martin/')">READ</button>
+        </div>
+    </div>
+    <div class="game-card" data-name="The Angelus">
+        <div class="game-info">
+            <h3>The Angelus</h3>
+            <p>A prayer based on scripture and the Annunciation</p> 
+            <button class="play-btn" onclick="openGame('https://CatholicWeb4Prayer.github.io/Angelus/')">PRAY</button>
+        </div>
+    </div>
+</section>
+
+<h2 class="section-title">Community Prayer Wall</h2>
+<section class="prayer-section">
+    <div class="prayer-container">
+        <form class="prayer-form" id="prayerForm">
+            <input type="text" id="prayerName" placeholder="Your Name or 'Anonymous'" required>
+            <textarea id="prayerText" placeholder="Share your prayer intention..." required></textarea>
+            <button type="submit">Submit Prayer Request</button>
+        </form>
+        <div class="prayer-list" id="prayerList">
+            <div class="prayer-item">
+                <h4>Maria S.</h4>
+                <p>Please pray for peace in our families and strength for those going through difficult times.</p>
+                <span>July 31, 2026</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="modal" id="gameModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeGame()">X</button>
+        <iframe id="gameFrame"></iframe>
+    </div>
+</div>
+
+<div class="modal" id="newsModal">
+    <div class="news-content">
+        <button class="close-btn" onclick="closeNewsModal()">X</button>
+        <h2>What's New</h2>
+        
+        <div class="news-item">
+            <h4>Live Public Prayer Wall Added</h4>
+            <span>July 2026</span>
+            <p>You can now submit and view live prayer intentions from members of the community right on the homepage.</p>
+        </div>
+
+        <div class="news-item">
+            <h4>The Angelus Prayer Added</h4>
+            <span>July 2026</span>
+            <p>Explore our newest addition—a dedicated page to help you pray and reflect upon The Angelus scriptural prayer.</p>
+        </div>
+
+        <div class="news-item">
+            <h4>Saint Martin de Porres Profile</h4>
+            <span>June 2026</span>
+            <p>Read all about the inspiring life, charity, and legacy of Saint Martin de Porres in our updated reading section.</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2026 CatholicWeb4Prayer
+</footer>
+
+<script>
+function scrollToGames(){
+    document.getElementById('gamesGrid').scrollIntoView({
+        behavior:'smooth'
+    });
+}
+
+function openGame(url){
+    document.getElementById('gameModal').style.display='flex';
+    document.getElementById('gameFrame').src=url;
+}
+
+function closeGame(){
+    document.getElementById('gameModal').style.display='none';
+    document.getElementById('gameFrame').src='';
+}
+
+function openNewsModal(){
+    document.getElementById('newsModal').style.display='flex';
+}
+
+function closeNewsModal(){
+    document.getElementById('newsModal').style.display='none';
+}
+
+// Prayer Wall functionality
+const prayerForm = document.getElementById('prayerForm');
+const prayerList = document.getElementById('prayerList');
+
+prayerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nameInput = document.getElementById('prayerName');
+    const textInput = document.getElementById('prayerText');
+    
+    const name = nameInput.value.trim();
+    const text = textInput.value.trim();
+    
+    if(name && text) {
+        const currentDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        
+        const prayerItem = document.createElement('div');
+        prayerItem.className = 'prayer-item';
+        prayerItem.innerHTML = `
+            <h4>${escapeHTML(name)}</h4>
+            <p>${escapeHTML(text)}</p>
+            <span>${currentDate}</span>
+        `;
+        
+        prayerList.insertBefore(prayerItem, prayerList.firstChild);
+        
+        nameInput.value = '';
+        textInput.value = '';
+    }
+});
+
+function escapeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
+
+const search = document.getElementById('search');
+const cards = document.querySelectorAll('.game-card');
+
+search.addEventListener('input', () => {
+    const value = search.value.toLowerCase();
+
+    cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+
+        if(name.includes(value)){
+            card.style.display='block';
+        } else {
+            card.style.display='none';
+        }
+    });
+});
+</script>
+
+</body>
+</html>
